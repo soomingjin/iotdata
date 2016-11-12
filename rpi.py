@@ -51,8 +51,8 @@ temp_C = float(temp) * 0.0625
 temp_F = temp_C * 9/5+32
 
 def readTemp():
-    if temp > 0x7FF:
-    temp = temp-4096;
+  if temp > 0x7FF:
+    temp = temp-4096
   temp_C = float(temp) * 0.0625
   temp_F = temp_C * 9/5+32
 
@@ -82,7 +82,7 @@ def main():
     lightLevel = str(readLight()) + " lx"
     print "Light Level : " + lightLevel
     print "Temp = %3.1f C -- %3.1f F" % (temp_C,temp_F)
-    print str(calendar.timegm(time.gmtime()))
+    #print str(calendar.timegm(time.gmtime()))
     
     #fb.put('/','newage',50)
     # fb.put('/','light',readLight())
@@ -95,11 +95,11 @@ def main():
     time.sleep(0.5)
 
 def putDataIntoFirebase(device, data=None):
-    current_timing=(int)(fb.get('/'+device+"/counter"))
-    timing=current_timing+1
-    fb.put('/' + device, timing, data)
-    fb.put('/' + device, "current", data)
-    fb.put('/' + device, "counter", timing)
+    current_timing = (int)(fb.get('/'+device+"/counter"))
+    timing = current_timing+1
+    fb.put('/' + device+ "/", str(timing), data)
+    fb.put('/' + device, "/current", data)
+    fb.put('/' + device, "/counter", timing)
 
 if __name__=="__main__":
    main()

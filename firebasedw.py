@@ -5,7 +5,7 @@ class FirebaseApplication():
 		self.url=url
 		self.firebaseToken=token
 
-	def put(self, root,node, data):
+	def put(self, root, node, data):
 		json_url=self.url+root+node
 		opener = urllib2.build_opener(urllib2.HTTPHandler)
 		request = urllib2.Request(json_url+".json",

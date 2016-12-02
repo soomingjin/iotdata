@@ -5,7 +5,7 @@ import firebasedw
 import urllib2
 import json
 
-url = "https://iotnoob.firebaseio.com"
+url = "https://iot-app-1ace2.firebaseio.com/"
 
 fb = firebasedw.FirebaseApplication(url,None)
 
@@ -51,7 +51,7 @@ temp_C = float(temp) * 0.0625
 temp_F = temp_C * 9/5+32
 
 def readTemp():
-  if temp > 0x7FF:
+    if temp > 0x7FF:
     temp = temp-4096;
   temp_C = float(temp) * 0.0625
   temp_F = temp_C * 9/5+32
@@ -67,7 +67,8 @@ def readLight(addr=DEVICE):
 
 def main():
 
-  while True:
+  # while True:
+  for i in range(10): #try running for 4 times first
     temp_reg_12bit = bus.read_word_data(DEVICE_ADDRESS , 0 )
     temp_low = (temp_reg_12bit & 0xff00) >> 8
     temp_high = (temp_reg_12bit & 0x00ff)
@@ -84,11 +85,21 @@ def main():
     print str(calendar.timegm(time.gmtime()))
     
     #fb.put('/','newage',50)
-    fb.put('/','lightlevel',lightLevel)
-    fb.put('/','temperature',"Temp = %3.1f C -- %3.1f F" % (temp_C,temp_F))
-    fb.put('/','date',str(calendar.timegm(time.gmtime())))
+    # fb.put('/','light',readLight())
+    # fb.put('/','temperature',"Temp = %3.1f C -- %3.1f F" % (temp_C,temp_F))
+    # fb.put('/','temperature',temp_C)
+    # fb.put('/','date',str(calendar.timegm(time.gmtime())))
+    putDataIntoFirebase("light",readLight())
+    putDataIntoFirebase("temperature",temp_C)
 
     time.sleep(0.5)
-  
+
+def putDataIntoFirebase(device, data=None):
+    current_timing=(int)(fb.get('/'+device+"/counter"))
+    timing=current_timing+1
+    fb.put('/' + device, timing, data)
+    fb.put('/' + device, "current", data)
+    fb.put('/' + device, "counter", timing)
+
 if __name__=="__main__":
    main()
